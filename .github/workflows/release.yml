@@ -62,7 +62,7 @@ jobs:
       - name: Build Debian package
         run: |
           cargo install cargo-deb
-          cargo deb --target ${{ matrix.target }}
+          cargo deb --target ${{ matrix.target }} --deb-version ${{ needs.create-release.outputs.trip_version }}
           
       - name: Upload assets to Github
         uses: actions/upload-release-asset@v1.0.1
