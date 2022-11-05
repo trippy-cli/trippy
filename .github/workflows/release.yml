@@ -44,6 +44,18 @@ jobs:
           - build: linux-gnu
             os: ubuntu-18.04
             target: x86_64-unknown-linux-gnu
+#          - build: linux-musl
+#            os: ubuntu-18.04
+#            target: x86_64-unknown-linux-musl
+#          - build: linux-arm
+#            os: ubuntu-18.04
+#            target: aarch64-unknown-linux-gnu
+#          - build: macos
+#            os: macos-latest
+#            target: x86_64-apple-darwin
+#          - build: netbsd
+#            os: ubuntu-18.04
+#            target: x86_64-unknown-netbsd
 
     steps:
       - name: Checkout repository
@@ -79,5 +91,5 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_content_type: application/vnd.debian.binary-package
-          asset_path: target/${{ matrix.target }}/debian/trippy_${{ needs.create-release.outputs.trip_version }}_${DPKG_ARCH}.deb
-          asset_name: trippy_${{ matrix.target }}_${{ needs.create-release.outputs.trip_version }}_{DPKG_ARCH}.deb
+          asset_path: target/${{ matrix.target }}/debian/trippy_${{ needs.create-release.outputs.trip_version }}_${{ env.DPKG_ARCH }}.deb
+          asset_name: trippy_${{ matrix.target }}_${{ needs.create-release.outputs.trip_version }}_${{ env.DPKG_ARCH }}.deb
