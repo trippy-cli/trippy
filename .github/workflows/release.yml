@@ -39,23 +39,11 @@ jobs:
       RUST_BACKTRACE: 1
     strategy:
       matrix:
-        build: [linux-gnu, linux-musl, linux-arm, macos, netbsd]
+        build: [linux-gnu]
         include:
           - build: linux-gnu
             os: ubuntu-18.04
             target: x86_64-unknown-linux-gnu
-          - build: linux-musl
-            os: ubuntu-18.04
-            target: x86_64-unknown-linux-musl
-          - build: linux-arm
-            os: ubuntu-18.04
-            target: aarch64-unknown-linux-gnu
-          - build: macos
-            os: macos-latest
-            target: x86_64-apple-darwin
-          - build: netbsd
-            os: ubuntu-18.04
-            target: x86_64-unknown-netbsd
 
     steps:
       - name: Checkout repository
@@ -106,3 +94,18 @@ jobs:
           asset_path: ${{ env.ASSET }}
           asset_name: ${{ env.ASSET }}
           asset_content_type: application/octet-stream
+          
+      - name: Build Debian package
+        run: |
+          cargo install cargo-deb
+          cargo deb --target ${{ matrix.target }}
+          
+      - name: Upload assets to Github
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.make_release.outputs.upload_url }}
+          asset_content_type: application/vnd.debian.binary-package
+          asset_path: target/${{ matrix.target }}/debian/trippy_${{ steps.get_version.outputs.VERSION }}_amd64.deb
+          asset_name: trippy_${{ steps.get_version.outputs.VERSION }}_amd64.deb
