@@ -59,42 +59,6 @@ jobs:
           override: true
           target: ${{ matrix.target }}
 
-      - name: Use Cross
-        shell: bash
-        run: |
-          cargo install cross
-          echo "CARGO=cross" >> $GITHUB_ENV
-          echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
-          echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
-
-      - name: Show command used for Cargo
-        run: |
-          echo "cargo command is: ${{ env.CARGO }}"
-          echo "target flag is: ${{ env.TARGET_FLAGS }}"
-          echo "target dir is: ${{ env.TARGET_DIR }}"
-
-      - name: Build release binary
-        run: ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
-
-      - name: Build archive
-        shell: bash
-        run: |
-          staging="trippy-${{ needs.create-release.outputs.trip_version }}-${{ matrix.target }}"
-          mkdir -p "$staging"
-          cp "target/${{ matrix.target }}/release/trip" "$staging/"
-          tar czf "$staging.tar.gz" "$staging"
-          echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
-
-      - name: Upload release archive
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ env.ASSET }}
-          asset_name: ${{ env.ASSET }}
-          asset_content_type: application/octet-stream
-          
       - name: Build Debian package
         run: |
           cargo install cargo-deb
@@ -105,7 +69,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.make_release.outputs.upload_url }}
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_content_type: application/vnd.debian.binary-package
-          asset_path: target/${{ matrix.target }}/debian/trippy_${{ steps.get_version.outputs.VERSION }}_amd64.deb
-          asset_name: trippy_${{ steps.get_version.outputs.VERSION }}_amd64.deb
+          asset_path: target/${{ matrix.target }}/debian/trippy_${{ needs.create-release.outputs.trip_version }}_amd64.deb
+          asset_name: trippy_${{ needs.create-release.outputs.trip_version }}_amd64.deb
