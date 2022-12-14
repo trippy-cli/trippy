@@ -79,13 +79,13 @@ jobs:
       - name: Build archive
         shell: bash
         run: |
+          staging="trippy-${{ needs.create-release.outputs.trip_version }}-${{ matrix.target }}"
+          mkdir -p "$staging"
           if [ "${{ matrix.os }}" = "windows-2022" ]; then
             cp "target/${{ matrix.target }}/release/trip.exe" "$staging/"
             7z a "$staging.zip" "$staging"
             echo "ASSET=$staging.zip" >> $GITHUB_ENV
           else
-            staging="trippy-${{ needs.create-release.outputs.trip_version }}-${{ matrix.target }}"
-            mkdir -p "$staging"
             cp "target/${{ matrix.target }}/release/trip" "$staging/"
             tar czf "$staging.tar.gz" "$staging"
             echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
