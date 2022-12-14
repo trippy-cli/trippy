@@ -96,7 +96,7 @@ jobs:
         run: |
           staging="trippy-${{ needs.create-release.outputs.trip_version }}-${{ matrix.target }}"
           mkdir -p "$staging"
-          cp "target/${{ matrix.target }}/release/trip" "$staging/"
+          cp "target/${{ matrix.target }}/release/trip.exe" "$staging/"
           tar czf "$staging.tar.gz" "$staging"
           echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
 
