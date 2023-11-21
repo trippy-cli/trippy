@@ -39,7 +39,7 @@ jobs:
       RUST_BACKTRACE: 1
     strategy:
       matrix:
-        build: [macos-arm]
+        build: [netbsd, macos-arm]
         include:
 #          - build: linux-gnu
 #            os: ubuntu-22.04
@@ -56,9 +56,9 @@ jobs:
           - build: macos-arm
             os: macos
             target: aarch64-apple-darwin
-#          - build: netbsd
-#            os: ubuntu-22.04
-#            target: x86_64-unknown-netbsd
+          - build: netbsd
+            os: ubuntu-22.04
+            target: x86_64-unknown-netbsd
 #          - build: win-msvc
 #            os: windows-2022
 #            target: x86_64-pc-windows-msvc
