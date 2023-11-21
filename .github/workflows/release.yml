@@ -39,29 +39,29 @@ jobs:
       RUST_BACKTRACE: 1
     strategy:
       matrix:
-        build: [linux-gnu, linux-musl, linux-arm, macos, macos-arm, netbsd, win-msvc]
+        build: [macos-arm]
         include:
-          - build: linux-gnu
-            os: ubuntu-22.04
-            target: x86_64-unknown-linux-gnu
-          - build: linux-musl
-            os: ubuntu-22.04
-            target: x86_64-unknown-linux-musl
-          - build: linux-arm
-            os: ubuntu-22.04
-            target: aarch64-unknown-linux-gnu
-          - build: macos
-            os: macos-latest
-            target: x86_64-apple-darwin
+#          - build: linux-gnu
+#            os: ubuntu-22.04
+#            target: x86_64-unknown-linux-gnu
+#          - build: linux-musl
+#            os: ubuntu-22.04
+#            target: x86_64-unknown-linux-musl
+#          - build: linux-arm
+#            os: ubuntu-22.04
+#            target: aarch64-unknown-linux-gnu
+#          - build: macos
+#            os: macos-latest
+#            target: x86_64-apple-darwin
           - build: macos-arm
             os: macos
             target: aarch64-apple-darwin
-          - build: netbsd
-            os: ubuntu-22.04
-            target: x86_64-unknown-netbsd
-          - build: win-msvc
-            os: windows-2022
-            target: x86_64-pc-windows-msvc
+#          - build: netbsd
+#            os: ubuntu-22.04
+#            target: x86_64-unknown-netbsd
+#          - build: win-msvc
+#            os: windows-2022
+#            target: x86_64-pc-windows-msvc
 
     steps:
       - name: Checkout repository
