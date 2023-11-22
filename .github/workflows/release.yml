@@ -44,13 +44,13 @@ jobs:
         include:
           - build: armv7-linux-gnueabihf
             os: ubuntu-22.04
-            target: armv7-linux-gnueabihf
+            target: armv7-unknown-linux-gnueabihf
           - build: armv7-linux-musleabihf
             os: ubuntu-22.04
-            target: armv7-linux-musleabihf
+            target: armv7-unknown-linux-musleabihf
           - build: armv7-linux-musleabi
             os: ubuntu-22.04
-            target: armv7-linux-musleabi
+            target: armv7-unknown-linux-musleabi
 
     steps:
       - name: Checkout repository
