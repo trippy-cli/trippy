@@ -54,7 +54,7 @@ jobs:
 #            os: macos-latest
 #            target: x86_64-apple-darwin
           - build: macos-arm
-            os: macos
+            os: macos-latest
             target: aarch64-apple-darwin
           - build: netbsd
             os: ubuntu-22.04
