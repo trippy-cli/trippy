@@ -40,8 +40,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build: [armv7-linux-gnueabihf, armv7-linux-musleabihf, armv7-linux-musleabi]
+        build: [linux-gnu, linux-musl, linux-arm, macos, macos-arm, netbsd, win-msvc, armv7-linux-gnueabihf, armv7-linux-musleabihf, armv7-linux-musleabi]
         include:
+          - build: linux-gnu
+            os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - build: linux-musl
+            os: ubuntu-22.04
+            target: x86_64-unknown-linux-musl
+          - build: linux-arm
+            os: ubuntu-22.04
+            target: aarch64-unknown-linux-gnu
+          - build: macos
+            os: macos-latest
+            target: x86_64-apple-darwin
+          - build: macos-arm
+            os: macos-latest
+            target: aarch64-apple-darwin
+          - build: netbsd
+            os: ubuntu-22.04
+            target: x86_64-unknown-netbsd
+          - build: win-msvc
+            os: windows-2022
+            target: x86_64-pc-windows-msvc
           - build: armv7-linux-gnueabihf
             os: ubuntu-22.04
             target: armv7-unknown-linux-gnueabihf
@@ -57,14 +78,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-
-#      - name: Install Rust
-#        uses: actions-rs/toolchain@v1
-#        with:
-#          toolchain: stable
-#          profile: minimal
-#          override: true
-#          target: ${{ matrix.target }}
 
       - name: Use Cross
         shell: bash
