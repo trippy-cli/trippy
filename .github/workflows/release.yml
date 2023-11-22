@@ -121,7 +121,7 @@ jobs:
         run: |
           staging="trippy-${{ needs.create-release.outputs.trip_version }}-${{ matrix.target }}"
           mkdir -p "$staging"
-          if [ "${{ matrix.os }}" = "windows-2022" || "${{ matrix.build }}" = "x86_64-pc-windows-gnu" ]; then
+          if [ "${{ matrix.os }}" = "windows-2022" ] || [ "${{ matrix.build }}" = "x86_64-pc-windows-gnu" ]; then
             cp "target/${{ matrix.target }}/release/trip.exe" "$staging/"
             7z a -tzip "$staging.zip" "$staging"
             echo "ASSET=$staging.zip" >> $GITHUB_ENV
