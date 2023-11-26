@@ -41,10 +41,10 @@ jobs:
       matrix:
         build: [
           x86_64-linux-gnu, x86_64-linux-musl, aarch64-linux-gnu, aarch64-linux-musl,
-          armv7-linux-gnueabihf, armv7-linux-musleabihf, armv7-linux-musleabi,
-          x86_64-apple-darwin, aarch64-apple-darwin,
-          x86_64-pc-windows-msvc, x86_64-pc-windows-gnu, aarch64-pc-windows-msvc,
-          x86_64-netbsd, x86_64-freebsd
+          armv7-linux-gnueabihf, armv7-linux-musleabihf, armv7-linux-musleabi
+#          x86_64-apple-darwin, aarch64-apple-darwin,
+#          x86_64-pc-windows-msvc, x86_64-pc-windows-gnu, aarch64-pc-windows-msvc,
+#          x86_64-netbsd, x86_64-freebsd
         ]
         include:
           # Linux (x86_64 & aarch64)
@@ -72,32 +72,32 @@ jobs:
             os: ubuntu-22.04
             target: armv7-unknown-linux-musleabi
 
-          # macOS (x86_64 & aarch64)
-          - build: x86_64-apple-darwin
-            os: macos-latest
-            target: x86_64-apple-darwin
-          - build: aarch64-apple-darwin
-            os: macos-latest
-            target: aarch64-apple-darwin
-
-          # Windows (x86_64 & aarch64)
-          - build: x86_64-pc-windows-msvc
-            os: windows-2022
-            target: x86_64-pc-windows-msvc
-          - build: x86_64-pc-windows-gnu
-            os: ubuntu-22.04
-            target: x86_64-pc-windows-gnu
-          - build: aarch64-pc-windows-msvc
-            os: windows-2022
-            target: aarch64-pc-windows-msvc
-
-          # BSD (x86_64)
-          - build: x86_64-netbsd
-            os: ubuntu-22.04
-            target: x86_64-unknown-netbsd
-          - build: x86_64-freebsd
-            os: ubuntu-22.04
-            target: x86_64-unknown-freebsd
+#          # macOS (x86_64 & aarch64)
+#          - build: x86_64-apple-darwin
+#            os: macos-latest
+#            target: x86_64-apple-darwin
+#          - build: aarch64-apple-darwin
+#            os: macos-latest
+#            target: aarch64-apple-darwin
+#
+#          # Windows (x86_64 & aarch64)
+#          - build: x86_64-pc-windows-msvc
+#            os: windows-2022
+#            target: x86_64-pc-windows-msvc
+#          - build: x86_64-pc-windows-gnu
+#            os: ubuntu-22.04
+#            target: x86_64-pc-windows-gnu
+#          - build: aarch64-pc-windows-msvc
+#            os: windows-2022
+#            target: aarch64-pc-windows-msvc
+#
+#          # BSD (x86_64)
+#          - build: x86_64-netbsd
+#            os: ubuntu-22.04
+#            target: x86_64-unknown-netbsd
+#          - build: x86_64-freebsd
+#            os: ubuntu-22.04
+#            target: x86_64-unknown-freebsd
 
     steps:
       - name: Checkout repository
@@ -147,13 +147,13 @@ jobs:
 
       - name: Build RPM package
         shell: bash
-        if: startsWith(matrix.build, 'linux-gnu')
+        if: startsWith(matrix.build, 'x86_64-linux-gnu')
         run: |
           cargo install cargo-generate-rpm
           cargo generate-rpm --target ${{ matrix.target }} -o target/${{ matrix.target }}/generate-rpm/trippy-${{ needs.create-release.outputs.trip_version }}-x86_64.rpm
 
       - name: Upload RPM package
-        if: startsWith(matrix.build, 'linux-gnu')
+        if: startsWith(matrix.build, 'x86_64-linux-gnu')
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -165,7 +165,7 @@ jobs:
 
       - name: Create Debian package
         shell: bash
-        if: startsWith(matrix.build, 'linux-gnu') || startsWith(matrix.build, 'linux-musl')
+        if: startsWith(matrix.build, 'x86_64-linux-gnu') || startsWith(matrix.build, 'x86_64-linux-musl')
         run: |
           cargo install cargo-deb
           cargo deb --target ${{ matrix.target }} --deb-version ${{ needs.create-release.outputs.trip_version }}
@@ -179,7 +179,7 @@ jobs:
           echo "DPKG_ARCH=${DPKG_ARCH}" >> $GITHUB_ENV
 
       - name: Upload Deb Release Asset
-        if: startsWith(matrix.build, 'linux-gnu') || startsWith(matrix.build, 'linux-musl')
+        if: startsWith(matrix.build, 'x86_64-linux-gnu') || startsWith(matrix.build, 'x86_64-linux-musl')
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
