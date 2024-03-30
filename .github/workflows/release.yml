@@ -33,9 +33,9 @@ jobs:
     needs: ['create-release']
     runs-on: ${{ matrix.os }}
     env:
-      CARGO: cargo
-      TARGET_FLAGS: ""
-      TARGET_DIR: ./target
+#      CARGO: cargo
+#      TARGET_FLAGS: ""
+#      TARGET_DIR: ./target
       RUST_BACKTRACE: 1
     strategy:
       matrix:
@@ -113,22 +113,22 @@ jobs:
           override: true
           target: ${{ matrix.target }}
 
-      - name: Use Cross
-        shell: bash
-        run: |
-          cargo install cross --git https://github.com/cross-rs/cross
-          echo "CARGO=cross" >> $GITHUB_ENV
-          echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
-          echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
+#      - name: Use Cross
+#        shell: bash
+#        run: |
+#          cargo install cross --git https://github.com/cross-rs/cross
+#          echo "CARGO=cross" >> $GITHUB_ENV
+#          echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
+#          echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
 
-      - name: Show command used for Cargo
-        run: |
-          echo "cargo command is: ${{ env.CARGO }}"
-          echo "target flag is: ${{ env.TARGET_FLAGS }}"
-          echo "target dir is: ${{ env.TARGET_DIR }}"
+#      - name: Show command used for Cargo
+#        run: |
+#          echo "cargo command is: ${{ env.CARGO }}"
+#          echo "target flag is: ${{ env.TARGET_FLAGS }}"
+#          echo "target dir is: ${{ env.TARGET_DIR }}"
 
       - name: Build release binary
-        run: ${{ env.CARGO }} build --verbose --release ${{ env.TARGET_FLAGS }}
+        run: cargo build --verbose --release --target ${{ matrix.target }}
 
       - name: Build archive
         shell: bash
