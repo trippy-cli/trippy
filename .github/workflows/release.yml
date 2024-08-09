@@ -151,7 +151,7 @@ jobs:
         if: startsWith(matrix.build, 'x86_64-linux-gnu')
         run: |
           cargo install cargo-generate-rpm
-          cargo generate-rpm -p crates/trippy --target ${{ matrix.target }} -o target/${{ matrix.target }}/generate-rpm/trippy-${{ needs.create-release.outputs.trip_version }}-x86_64.rpm
+          cargo generate-rpm -p trippy --target ${{ matrix.target }} -o target/${{ matrix.target }}/generate-rpm/trippy-${{ needs.create-release.outputs.trip_version }}-x86_64.rpm
 
       - name: Upload RPM package
         if: startsWith(matrix.build, 'x86_64-linux-gnu')
@@ -169,7 +169,7 @@ jobs:
         if: startsWith(matrix.build, 'x86_64-linux-gnu') || startsWith(matrix.build, 'x86_64-linux-musl')
         run: |
           cargo install cargo-deb
-          cargo deb -p trippy-tui --target ${{ matrix.target }} --deb-version ${{ needs.create-release.outputs.trip_version }}
+          cargo deb -p trippy --target ${{ matrix.target }} --deb-version ${{ needs.create-release.outputs.trip_version }}
           case ${{ matrix.target }} in
             aarch64-*-linux-*) DPKG_ARCH=arm64 ;;
             arm-*-linux-*hf) DPKG_ARCH=armhf ;;
